@@ -20,8 +20,11 @@ public class Main {
             DatabaseConnection.init();
             DatabaseInitializer.kontrol();
         } catch (Exception e) {
+            e.printStackTrace();
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
             JOptionPane.showMessageDialog(null,
-                "Veritabanina baglanılamadı!\n\n" + e.getMessage() +
+                "Veritabanina baglanılamadı!\n\n" +
+                "Hata: " + cause.getMessage() +
                 "\n\nLutfen MySQL'in calistigından ve\n" +
                 "database.properties ayarlarının dogru oldugundan emin olunuz.",
                 "Baglanti Hatasi", JOptionPane.ERROR_MESSAGE);
