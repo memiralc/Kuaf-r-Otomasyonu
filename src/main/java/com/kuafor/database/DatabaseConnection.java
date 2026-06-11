@@ -20,8 +20,15 @@ public class DatabaseConnection {
             Properties props = new Properties();
             props.load(is);
 
+            String url = props.getProperty("db.url");
+            // Gerekli parametreler URL'de yoksa otomatik ekle
+            if (!url.contains("?")) url += "?";
+            if (!url.contains("serverTimezone")) url += "&serverTimezone=UTC";
+            if (!url.contains("useSSL")) url += "&useSSL=false";
+            if (!url.contains("allowPublicKeyRetrieval")) url += "&allowPublicKeyRetrieval=true";
+
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(props.getProperty("db.url"));
+            config.setJdbcUrl(url);
             config.setUsername(props.getProperty("db.user"));
             config.setPassword(props.getProperty("db.password"));
             config.setDriverClassName("com.mysql.cj.jdbc.Driver");
@@ -30,9 +37,6 @@ public class DatabaseConnection {
             config.setConnectionTimeout(30_000);
             config.setIdleTimeout(600_000);
             config.setMaxLifetime(1_800_000);
-            config.addDataSourceProperty("characterEncoding", "utf8mb4");
-            config.addDataSourceProperty("useSSL", "false");
-            config.addDataSourceProperty("serverTimezone", "UTC");
 
             dataSource = new HikariDataSource(config);
         } catch (Exception e) {

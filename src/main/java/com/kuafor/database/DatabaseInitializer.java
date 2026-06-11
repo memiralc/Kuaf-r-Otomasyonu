@@ -8,6 +8,13 @@ import java.sql.Statement;
 public class DatabaseInitializer {
 
     public static void kontrol() {
+        // Once sadece sunucuya baglan, veritabani yoksa olustur
+        try {
+            veritabaniOlustur();
+        } catch (Exception e) {
+            throw new RuntimeException("Veritabani olusturulamadi: " + e.getMessage(), e);
+        }
+
         try (Connection con = DatabaseConnection.getConnection()) {
             DatabaseMetaData meta = con.getMetaData();
             if (!tabloVarMi(meta, "musteriler")) {
@@ -15,6 +22,23 @@ public class DatabaseInitializer {
             }
         } catch (Exception e) {
             throw new RuntimeException("Veritabani baslatma hatasi: " + e.getMessage(), e);
+        }
+    }
+
+    private static void veritabaniOlustur() throws Exception {
+        java.util.Properties props = new java.util.Properties();
+        try (java.io.InputStream is = DatabaseInitializer.class.getResourceAsStream("/database.properties")) {
+            props.load(is);
+        }
+        String url = props.getProperty("db.url");
+        // DB adi olmadan sunucuya baglan
+        String serverUrl = url.replaceAll("/kuafor_db.*", "/?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true");
+        try (java.sql.Connection con = java.sql.DriverManager.getConnection(
+                serverUrl,
+                props.getProperty("db.user"),
+                props.getProperty("db.password"));
+             java.sql.Statement st = con.createStatement()) {
+            st.executeUpdate("CREATE DATABASE IF NOT EXISTS kuafor_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
         }
     }
 
