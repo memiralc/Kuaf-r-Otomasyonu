@@ -32,7 +32,7 @@ public class DatabaseConnection {
             config.setMaxLifetime(1_800_000);
             config.addDataSourceProperty("characterEncoding", "utf8mb4");
             config.addDataSourceProperty("useSSL", "false");
-            config.addDataSourceProperty("serverTimezone", "Europe/Istanbul");
+            config.addDataSourceProperty("serverTimezone", "UTC");
 
             dataSource = new HikariDataSource(config);
         } catch (Exception e) {
