@@ -1,8 +1,4 @@
-# Maven
-target/
-*.class
-*.jar
-*.war
+# Maven Wrapper cache
 .mvn/wrapper/maven-wrapper.jar
 
 # IDE
