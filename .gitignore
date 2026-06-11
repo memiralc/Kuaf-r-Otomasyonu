@@ -1,0 +1,22 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.eclipse/
+.settings/
+.classpath
+.project
+*.DS_Store
+.vscode/
+
+# Veritabanı şifresi — GÜVENLİK: Bu dosyayı asla commit etme!
+src/main/resources/database.properties
+
+# Log dosyaları
+*.log
+logs/
